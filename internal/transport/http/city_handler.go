@@ -133,9 +133,9 @@ func (h *CityHandler) ListOfUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *CityHandler) DeleteFromUser(w http.ResponseWriter, r *http.Request) {
-	userID, err := parseIDParam(r)
+	user, err := UserFromContext(r.Context())
 	if err != nil {
-		h.handleError(w, err)
+		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 		return
 	}
 
@@ -144,7 +144,7 @@ func (h *CityHandler) DeleteFromUser(w http.ResponseWriter, r *http.Request) {
 		h.handleError(w, domain.ErrInvalidCityID)
 	}
 
-	if err := h.service.DeleteFromUser(r.Context(), userID, cityID); err != nil {
+	if err := h.service.DeleteFromUser(r.Context(), user.ID, cityID); err != nil {
 		h.handleError(w, err)
 		return
 	}

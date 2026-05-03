@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -58,7 +57,7 @@ func RequireRole(allowedRoles ...domain.Roles) func(http.Handler) http.Handler {
 	allowed := make(map[domain.Roles]struct{}, len(allowedRoles))
 	// print()
 	for _, role := range allowedRoles {
-		fmt.Println(role)
+		// log.Println(role)
 		allowed[role] = struct{}{}
 	}
 
@@ -69,6 +68,8 @@ func RequireRole(allowedRoles ...domain.Roles) func(http.Handler) http.Handler {
 				WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 				return
 			}
+
+			// log.Println(user)
 
 			if _, ok := allowed[user.Role]; !ok {
 				WriteError(w, http.StatusForbidden, "forbidden: insufficient role", nil)

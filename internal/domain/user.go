@@ -20,10 +20,6 @@ type Roles string
 const (
 	RolesAdmin Roles = "admin"
 	RolesUser  Roles = "user"
-	// RolesManager      Roles = "manager"
-	// RolesPsychologist Roles = "psychologist"
-	// RolesClient       Roles = "client"
-	// RolesValue4       Roles = ""
 )
 
 type UserContext struct {

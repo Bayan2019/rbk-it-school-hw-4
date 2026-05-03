@@ -65,6 +65,7 @@ func NewUserHandler(service userService, jwtManager *auth.JWTManager) *UserHandl
 ////// methods
 ////// methods
 
+// 1. Аутентификация
 func (h *UserHandler) Register(w http.ResponseWriter, r *http.Request) {
 	// 1. Аутентификация
 	// - регистрация пользователя
@@ -106,6 +107,8 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 		WriteError(w, http.StatusUnauthorized, "invalid email or password", nil)
 		return
 	}
+
+	// log.Println(user.Role)
 
 	token, err := h.JwtManager.Generate(user.ID, user.Email, user.Role)
 	if err != nil {
