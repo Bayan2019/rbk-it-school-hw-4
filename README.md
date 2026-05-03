@@ -6,6 +6,25 @@
 
 ## REST API
 
+### Register
+
+```bash
+curl -X POST http://localhost:8080/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"bayan@example.com","password":"tramp",
+        "first_name": "Bayan", "last_name": "User",
+        "is_active": true}'
+```
+
+### Login
+
+```bash
+curl -X POST http://localhost:8080/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"admin123"}'
+```
+
+
 ### Добавить город пользователю
 
 ```bash
