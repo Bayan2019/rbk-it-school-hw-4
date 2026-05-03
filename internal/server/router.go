@@ -7,6 +7,7 @@ import (
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 
+	"github.com/Bayan2019/rbk-it-school-hw-4/internal/domain"
 	httptransport "github.com/Bayan2019/rbk-it-school-hw-4/internal/transport/http"
 )
 
@@ -46,7 +47,7 @@ func NewRouter(h *Handler) http.Handler {
 		// 5. Авторизация (Roles)
 		r.Group(func(r chi.Router) {
 			// Использовать middleware RequireRole("admin")
-			r.Use(httptransport.RequireRole("admin"))
+			r.Use(httptransport.RequireRole(domain.RolesAdmin))
 			// Только admin может:
 			r.Get("/users", h.User.List)
 			r.Get("/users/{id}", h.User.GetByID)

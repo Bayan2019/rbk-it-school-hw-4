@@ -21,15 +21,22 @@ curl -X POST http://localhost:8080/auth/register \
 ```bash
 curl -X POST http://localhost:8080/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@example.com","password":"admin123"}'
+  -d '{"email":"bayan@example.com","password":"tramp"}'
 ```
 
+### Profile
+
+```bash
+curl http://localhost:8080/users/me \
+  -H "Authorization: Bearer $TOKEN"
+```
 
 ### Добавить город пользователю
 
 ```bash
-curl -X POST http://localhost:8080/api/v1/users/1/cities \
+curl -X POST http://localhost:8080/cities \
   -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $TOKEN" \
   -d '{
     "city": "Almaty"
   }'
@@ -38,25 +45,48 @@ curl -X POST http://localhost:8080/api/v1/users/1/cities \
 ### Список городов пользователя
 
 ```bash
-curl -X GET http://localhost:8080/api/v1/users/1/cities
+curl -X GET http://localhost:8080/cities \
+-H "Authorization: Bearer $TOKEN"
 ```
 
 ### Удалить город
 
 ```bash
-curl -X DELETE http://localhost:8080/api/v1/users/1/cities/3
+curl -X DELETE http://localhost:8080/cities/3 \
+-H "Authorization: Bearer $TOKEN"
 ```
 
 ### Получить погоду по всем городам пользователя
 
 ```bash
-curl -X GET http://localhost:8080/api/v1/users/1/weather
+curl -X GET http://localhost:8080/weather \
+-H "Authorization: Bearer $TOKEN"
 ```
 
 ### Получить историю с фильтрацией
 
 ```bash
-curl -X GET http://localhost:8080/api/v1/users/1/weather/history?city=astana"
+curl -X GET http://localhost:8080/weather/history?city=astana \ 
+-H "Authorization: Bearer $TOKEN"
+```
+
+
+
+### Admin endpoint
+
+```bash
+curl -X GET http://localhost:8080/users \
+-H "Authorization: Bearer $TOKEN"
+```
+
+```bash
+curl -X GET http://localhost:8080/users/3 \
+-H "Authorization: Bearer $TOKEN"
+```
+
+```bash
+curl -X DELETE http://localhost:8080/users \
+-H "Authorization: Bearer $TOKEN"
 ```
 
 

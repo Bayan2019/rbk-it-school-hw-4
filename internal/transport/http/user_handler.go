@@ -122,9 +122,15 @@ func (h *UserHandler) Login(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *UserHandler) Profile(w http.ResponseWriter, r *http.Request) {
-	user, err := UserFromContext(r.Context())
+	userCtx, err := UserFromContext(r.Context())
 	if err != nil {
 		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
+		return
+	}
+
+	user, err := h.service.GetByEmail(r.Context(), userCtx.Email, false)
+	if err != nil {
+		WriteError(w, http.StatusInternalServerError, "couldn't get user", err)
 		return
 	}
 

@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -55,7 +56,9 @@ func AuthMiddleware(jwtManager *auth.JWTManager) func(http.Handler) http.Handler
 
 func RequireRole(allowedRoles ...domain.Roles) func(http.Handler) http.Handler {
 	allowed := make(map[domain.Roles]struct{}, len(allowedRoles))
+	// print()
 	for _, role := range allowedRoles {
+		fmt.Println(role)
 		allowed[role] = struct{}{}
 	}
 

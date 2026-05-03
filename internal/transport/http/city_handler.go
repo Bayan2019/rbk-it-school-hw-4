@@ -112,9 +112,9 @@ func (h *CityHandler) Add2User(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *CityHandler) ListOfUser(w http.ResponseWriter, r *http.Request) {
-	userID, err := parseIDParam(r)
+	user, err := UserFromContext(r.Context())
 	if err != nil {
-		h.handleError(w, err)
+		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 		return
 	}
 
@@ -123,7 +123,7 @@ func (h *CityHandler) ListOfUser(w http.ResponseWriter, r *http.Request) {
 		IncludeDeleted: parseBoolQuery(r, "include_deleted", false),
 	}
 
-	cities, err := h.service.ListOfUser(r.Context(), userID, filter)
+	cities, err := h.service.ListOfUser(r.Context(), user.ID, filter)
 	if err != nil {
 		h.handleError(w, err)
 		return

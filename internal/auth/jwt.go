@@ -42,7 +42,7 @@ func (m *JWTManager) Generate(userID int64, email string, role domain.Roles) (st
 		Role:   role,
 		Exp:    time.Now().Add(30 * time.Minute),
 		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(90 * time.Minute)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			Issuer:    "jwt-auth-lesson",
 			Subject:   fmt.Sprintf("%d", userID),
@@ -80,7 +80,7 @@ func (m *JWTManager) Validate(tokenString string) (*Claims, error) {
 
 	// 6. Безопасность
 	// - проверка exp
-	if claims.Exp.Before(time.Now().Add(30 * time.Minute)) {
+	if claims.Exp.After(time.Now().Add(30 * time.Minute)) {
 		return claims, ErrTokenExpired
 	}
 

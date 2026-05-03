@@ -107,7 +107,7 @@ func (r *UserRepository) List(ctx context.Context, filter domain.ListUsersFilter
 
 func (r *UserRepository) GetByID(ctx context.Context, id int64, includeDeleted bool) (domain.User, error) {
 	query := `
-		SELECT id, email, password_hash, first_name, last_name, is_active, created_at, updated_at, deleted_at
+		SELECT id, email, password_hash, first_name, last_name, role, is_active, created_at, updated_at, deleted_at
 		FROM users
 		WHERE id = $1
 	`
@@ -128,7 +128,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64, includeDeleted b
 
 func (r *UserRepository) GetByEmail(ctx context.Context, email string, includeDeleted bool) (domain.User, error) {
 	query := `
-		SELECT id, email, password_hash, first_name, last_name, is_active, created_at, updated_at, deleted_at
+		SELECT id, email, password_hash, first_name, last_name, role, is_active, created_at, updated_at, deleted_at
 		FROM users
 		WHERE email = $1
 	`
