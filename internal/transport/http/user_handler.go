@@ -134,23 +134,6 @@ func (h *UserHandler) Profile(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-func (h *UserHandler) AdminReports(w http.ResponseWriter, r *http.Request) {
-	user, err := UserFromContext(r.Context())
-	if err != nil {
-		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
-		return
-	}
-
-	WriteJSON(w, http.StatusOK, map[string]interface{}{
-		"message": "this is admin-only endpoint",
-		"user":    user,
-		"reports": []string{
-			"daily-auth-report",
-			"security-login-report",
-		},
-	})
-}
-
 func (h *UserHandler) List(w http.ResponseWriter, r *http.Request) {
 	filter := domain.ListUsersFilter{
 		Limit:          parseIntQuery(r, "limit", 20),

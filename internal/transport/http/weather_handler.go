@@ -32,13 +32,12 @@ type WeatherHandler struct {
 ////// methods
 
 func (h *WeatherHandler) GetWeatherOfUserCities(w http.ResponseWriter, r *http.Request) {
-	userID, err := parseIDParam(r)
+	user, err := UserFromContext(r.Context())
 	if err != nil {
-		WriteJSON(w, http.StatusBadRequest, errorResponse{Error: err.Error(), Message: "invalid path variable"})
+		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 		return
 	}
-
-	cities, err := h.CityService.ListOfUser(r.Context(), userID, domain.ListCitiesFilter{})
+	cities, err := h.CityService.ListOfUser(r.Context(), user.ID, domain.ListCitiesFilter{})
 	if err != nil {
 		WriteJSON(w, http.StatusInternalServerError, errorResponse{Error: err.Error(), Message: "couldn't get cities of user"})
 		return
@@ -60,7 +59,7 @@ func (h *WeatherHandler) GetWeatherOfUserCities(w http.ResponseWriter, r *http.R
 	}
 
 	for _, result := range results {
-		_, err = h.WeatherService.CreateHistory(r.Context(), userID, domain.CityWeatherInput{
+		_, err = h.WeatherService.CreateHistory(r.Context(), user.ID, domain.CityWeatherInput{
 			City:        result.City,
 			Temperature: result.Temperature,
 			Description: result.Description,
@@ -80,13 +79,13 @@ func (h *WeatherHandler) GetWeatherHistoryOfUser(w http.ResponseWriter, r *http.
 		Offset: parseIntQuery(r, "offset", 0),
 		City:   r.URL.Query().Get("city"),
 	}
-	userID, err := parseIDParam(r)
+	user, err := UserFromContext(r.Context())
 	if err != nil {
-		WriteJSON(w, http.StatusBadRequest, errorResponse{Error: err.Error(), Message: "invalid path variable"})
+		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 		return
 	}
 
-	result, err := h.WeatherService.WeatherHistoryOfUser(r.Context(), userID, filter)
+	result, err := h.WeatherService.WeatherHistoryOfUser(r.Context(), user.ID, filter)
 	if err != nil {
 		WriteJSON(w, http.StatusInternalServerError, errorResponse{Error: err.Error(), Message: "couldn't get weather history"})
 		return

@@ -51,9 +51,9 @@ func NewCityHandler(service cityService, provider osmProvider) *CityHandler {
 
 func (h *CityHandler) Add2User(w http.ResponseWriter, r *http.Request) {
 
-	userID, err := parseIDParam(r)
+	user, err := UserFromContext(r.Context())
 	if err != nil {
-		WriteJSON(w, http.StatusBadRequest, errorResponse{Error: err.Error(), Message: "parsing userID"})
+		WriteError(w, http.StatusUnauthorized, "unauthorized", err)
 		return
 	}
 
@@ -94,7 +94,7 @@ func (h *CityHandler) Add2User(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			err = h.service.Add2User(r.Context(), userID, domain.AddCityInput{City: city.City})
+			err = h.service.Add2User(r.Context(), user.ID, domain.AddCityInput{City: city.City})
 
 			WriteJSON(w, http.StatusCreated, cityResponse{Data: city})
 			return
@@ -103,7 +103,7 @@ func (h *CityHandler) Add2User(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = h.service.Add2User(r.Context(), userID, input)
+	err = h.service.Add2User(r.Context(), user.ID, input)
 	if err != nil {
 		h.handleError(w, err)
 		return
