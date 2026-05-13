@@ -24,6 +24,12 @@ curl -X POST http://localhost:8080/auth/login \
   -d '{"email":"bayan@example.com","password":"tramp"}'
 ```
 
+```bash
+curl -X POST http://localhost:8080/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"admin@example.com","password":"admin123"}'
+```
+
 ### Profile
 
 ```bash
